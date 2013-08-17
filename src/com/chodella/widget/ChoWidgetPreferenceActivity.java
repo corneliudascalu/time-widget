@@ -1,6 +1,7 @@
 package com.chodella.widget;
 
 import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -57,11 +58,27 @@ public class ChoWidgetPreferenceActivity extends PreferenceActivity {
 
     @Override
     public void onBackPressed() {
-        String value = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getString(getString(R.string.startDateKey), null);
-        if (value == null) {
+        int days = -1;
+        try {
+            days = getDays(getApplicationContext());
+        } catch (Exception e) {
+            setResult(RESULT_CANCELED);
             finish();
-            return;
+        }
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        RemoteViews views = new RemoteViews(getApplicationContext().getPackageName(), R.layout.main);
+        views.setCharSequence(R.id.widgetBadge, "setText", String.valueOf(days));
+        appWidgetManager.updateAppWidget(mAppWidgetId, views);
+        finish();
+    }
+
+    public static int getDays(Context context) throws Exception {
+        String value = PreferenceManager.getDefaultSharedPreferences(context).getString(
+                context.getString(R.string.startDateKey), null);
+
+        if (value == null) {
+            throw new Exception("The date is not set");
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -69,7 +86,7 @@ public class ChoWidgetPreferenceActivity extends PreferenceActivity {
         try {
             calendar.setTime(sdf.parse(value));
         } catch (ParseException e) {
-            Toast.makeText(getBaseContext(), "Failed to parse date", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to parse date", Toast.LENGTH_SHORT).show();
             Log.e("Chodella", "Failed to parse date", e);
         }
 
@@ -78,10 +95,6 @@ public class ChoWidgetPreferenceActivity extends PreferenceActivity {
         long diff = now.getTimeInMillis() - calendar.getTimeInMillis();
         int days = (int) (diff / 1000 / 60 / 60 / 24);
 
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-        RemoteViews views = new RemoteViews(getApplicationContext().getPackageName(), R.layout.main);
-        views.setCharSequence(R.id.widgetBadge, "setText", String.valueOf(days));
-        appWidgetManager.updateAppWidget(mAppWidgetId, views);
-        finish();
+        return days;
     }
 }

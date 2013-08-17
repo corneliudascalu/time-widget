@@ -17,10 +17,17 @@ public class ChoWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main);
         views.setOnClickPendingIntent(R.id.widgetBadge, PendingIntent.getActivity(context, 123,
-                new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE), PendingIntent.FLAG_CANCEL_CURRENT));
+                new Intent(context, ChoWidgetPreferenceActivity.class), PendingIntent.FLAG_CANCEL_CURRENT));
         views.setOnClickPendingIntent(R.id.widgetDescription, PendingIntent.getActivity(context, 123,
-                new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE), PendingIntent.FLAG_CANCEL_CURRENT));
+                new Intent(context, ChoWidgetPreferenceActivity.class), PendingIntent.FLAG_CANCEL_CURRENT));
         AppWidgetProviderInfo info = appWidgetManager.getAppWidgetInfo(appWidgetIds[0]);
+        try {
+            int days = ChoWidgetPreferenceActivity.getDays(context);
+            views.setCharSequence(R.id.widgetBadge, "setText", String.valueOf(days));
+            views.setCharSequence(R.id.widgetDescription, "setText", String.format("%d days", days));
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         appWidgetManager.updateAppWidget(appWidgetIds[0], views);
     }
 
