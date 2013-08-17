@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:initialLayout="@layout/main"
+                    android:minWidth="260dp"
+                    android:minHeight="128dp"
+                    android:minResizeWidth="200dp"
+                    android:minResizeHeight="128dp"
+                    android:previewImage="@drawable/star"
+                    android:updatePeriodMillis="30000"
+                    android:resizeMode="horizontal|vertical"
+                    android:widgetCategory="home_screen|keyguard"
+                    android:configure="com.chodella.widget.ChoWidgetPreferenceActivity">
+
+</appwidget-provider>

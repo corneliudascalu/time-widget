@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:id="@+id/startDatePreference"
+        android:key="@string/startDateKey"
+        android:title="Start Date"
+        android:contentDescription="Set the start date as YYYY/MM/DD"/>
+</PreferenceScreen>
